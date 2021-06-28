@@ -27,11 +27,11 @@ A simple web application for restaurant fanatic
 
 ## Prerequisites
 
-1.Visual Studio Code
-2.Express 4.17.1
-3.Node.js
-4.BootStrap v4.3
-5.JQuery v3.3.1
-6.popper.js
-7.restaurant.json
-8.express-handlebars 5.3.2
+- 1.Visual Studio Code
+- 2.Express 4.17.1
+- 3.Node.js
+- 4.BootStrap v4.3
+- 5.JQuery v3.3.1
+- 6.popper.js
+- 7.restaurant.json
+- 8.express-handlebars 5.3.2
