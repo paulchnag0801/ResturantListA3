@@ -19,13 +19,26 @@ app.get('/', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
-  const restaurantKeyword = restaurantList.results.filter((keyword) => {
-    return keyword.name.toLowerCase().includes(req.query.keyword.toLowerCase())
-  })
-  res.render('index', {
-    restaurants: restaurantKeyword,
-    keyword: req.query.keyword,
-  })
+  const restaurantKeyword = restaurantList.results.filter(
+    (restaurantKeywords) => {
+      const keyword = req.query.keyword.trim().toLowerCase()
+      return (
+        restaurantKeywords.name.toLowerCase().includes(keyword) ||
+        restaurantKeywords.category.toLowerCase().includes(keyword)
+      )
+    }
+  )
+  if (restaurantKeyword.length > 0) {
+    res.render('index', {
+      restaurants: restaurantKeyword,
+      keyword: req.query.keyword.trim(),
+    })
+  } else {
+    res.render('index', {
+      keyword: req.query.keyword,
+      no_result: `<h3> 沒有"${req.query.keyword}"的搜尋結果，請輸入正確的餐廳名稱</h3>`,
+    })
+  }
 })
 
 app.get('/restaurants/:restaurant_id', (req, res) => {
