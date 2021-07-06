@@ -1,7 +1,24 @@
 // require packages used in the project
 const express = require('express')
+const mongoose = require('mongoose') // 載入 mongoose
 const app = express()
 const port = 3000
+
+mongoose.connect('mongodb://localhost/restaurant-list', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}) // 設定連線到 mongoDB
+
+// 取得資料庫連線狀態
+const db = mongoose.connection
+// 連線異常
+db.on('error', () => {
+  console.log('mongodb error!')
+})
+// 連線成功
+db.once('open', () => {
+  console.log('mongodb connected!')
+})
 
 // require express-handlebars here
 const exphbs = require('express-handlebars')
@@ -11,7 +28,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' })) // 定義要使用�
 app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
 
 // setting static files
-app.use(express.static('public'))//告訴 Express 靜態檔案是放在名為 public 的資料夾中
+app.use(express.static('public')) //告訴 Express 靜態檔案是放在名為 public 的資料夾中
 
 // routes setting
 app.get('/', (req, res) => {
