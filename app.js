@@ -11,7 +11,7 @@ app.engine('handlebars', exphbs({ defaultLayout: 'main' })) // 定義要使用�
 app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
 
 // setting static files
-app.use(express.static('public'))
+app.use(express.static('public'))//告訴 Express 靜態檔案是放在名為 public 的資料夾中
 
 // routes setting
 app.get('/', (req, res) => {
