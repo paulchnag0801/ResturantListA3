@@ -1,6 +1,7 @@
 // require packages used in the project
 const express = require('express')
 const mongoose = require('mongoose') // 載入 mongoose
+const Restaurant = require('./models/restaurant') //載入restaurant model
 const app = express()
 const port = 3000
 
@@ -32,7 +33,10 @@ app.use(express.static('public')) //告訴 Express 靜態檔案是放在名為 p
 
 // routes setting
 app.get('/', (req, res) => {
-  res.render('index', { restaurants: restaurantList.results })
+  Restaurant.find()
+    .lean()
+    .then((restaurants) => res.render('index', { restaurants }))
+    .catch((error) => console.error(error))
 })
 
 app.get('/search', (req, res) => {
