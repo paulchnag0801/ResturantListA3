@@ -23,7 +23,7 @@ db.once('open', () => {
 
 // require express-handlebars here
 const exphbs = require('express-handlebars')
-const restaurantList = require('./restaurant.json')
+// const restaurantList = require('./restaurant.json')
 // setting template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' })) // 定義要使用的樣板引擎
 app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
@@ -60,6 +60,50 @@ app.get('/search', (req, res) => {
       no_result: `<h3> 沒有"${req.query.keyword}"的搜尋結果，請輸入正確的餐廳名稱</h3>`,
     })
   }
+})
+
+// create route
+app.get('/restaurants/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/restaurants', (req, res) => {
+  const {
+    name,
+    name_en,
+    category,
+    image,
+    location,
+    phone,
+    google_map,
+    rating,
+    description,
+  } = req.body
+  if (
+    !name ||
+    !category ||
+    !image ||
+    !location ||
+    !phone ||
+    !google_map ||
+    !rating ||
+    !description
+  ) {
+    return res.redirect('/restaurants/new')
+  }
+  return Restaurant.create({
+    name,
+    name_en,
+    category,
+    image,
+    location,
+    phone,
+    google_map,
+    rating,
+    description,
+  })
+    .then(() => res.redirect('/'))
+    .catch((error) => console.error(error))
 })
 
 app.get('/restaurants/:restaurant_id', (req, res) => {
