@@ -148,13 +148,12 @@ app.put('/restaurants/:id', (req, res) => {
 })
 
 // delete route
-app.delete('/restaurants/:id', (req, res) => {
+app.post('/restaurants/:id/delete', (req, res) => {
   const id = req.params.id
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.redirect('back')
   return Restaurant.findById(id)
     .then((restaurant) => restaurant.remove())
     .then(() => res.redirect('/'))
-    .catch(error => console.error(error))
+    .catch((error) => console.log(error))
 })
 
 // start and listen on the Express server
