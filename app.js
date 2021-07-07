@@ -30,7 +30,7 @@ app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
 
 // setting static files
 app.use(express.static('public')) //告訴 Express 靜態檔案是放在名為 public 的資料夾中
-
+app.use(express.urlencoded({ extended: true }))
 // routes setting
 app.get('/', (req, res) => {
   Restaurant.find()
@@ -39,28 +39,36 @@ app.get('/', (req, res) => {
     .catch((error) => console.error(error))
 })
 
-// app.get('/search', (req, res) => {
-//   const restaurantKeyword = restaurantList.results.filter(
-//     (restaurantKeywords) => {
-//       const keyword = req.query.keyword.trim().toLowerCase()
-//       return (
-//         restaurantKeywords.name.toLowerCase().includes(keyword) ||
-//         restaurantKeywords.category.toLowerCase().includes(keyword)
-//       )
-//     }
-//   )
-//   if (restaurantKeyword.length > 0) {
-//     res.render('index', {
-//       restaurants: restaurantKeyword,
-//       keyword: req.query.keyword.trim(),
-//     })
-//   } else {
-//     res.render('index', {
-//       keyword: req.query.keyword,
-//       no_result: `<h3> 沒有"${req.query.keyword}"的搜尋結果，請輸入正確的餐廳名稱</h3>`,
-//     })
-//   }
-// })
+
+app.get('/restaurants/searches', (req, res) => {
+  const keyword = req.query.keyword.trim().toLowerCase()
+  Restaurant.find()
+    .lean()
+    .then((restaurants) => {
+      if (keyword) {
+        restaurants = restaurants.filter(
+          (restaurant) =>
+            restaurant.name.toLowerCase().includes(keyword) ||
+            restaurant.category.includes(keyword)
+        )
+        console.log('restaurants', restaurants)
+        console.log('restaurants.length', restaurants.length)
+        return res.render('index', {
+          restaurants: restaurants,
+          keyword: req.query.keyword.trim(),
+        })
+        
+      }
+      if (restaurants.length === 0) {
+        console.log('restaurants.length', restaurants.length)
+         res.render('index', {
+          keyword: req.query.keyword,
+          no_result: `<h3> 沒有"${req.query.keyword}"的搜尋結果，請輸入正確的餐廳名稱</h3>`,
+        })
+      }
+    })
+    .catch((error) => console.error(error))
+})
 
 // create route
 app.get('/restaurants/new', (req, res) => {
@@ -126,21 +134,21 @@ app.get('/restaurants/:id/edit', (req, res) => {
     .catch((error) => console.error(error))
 })
 
-app.put('/restaurants/:id', (req, res) => {
+app.post('/restaurants/:id/edit', (req, res) => {
   const id = req.params.id
   if (!mongoose.Types.ObjectId.isValid(id)) return res.redirect('back')
-  const modifiedRestaurant = req.body
+  const editRestaurant = req.body
   return Restaurant.findById(id)
     .then((restaurant) => {
-      restaurant.name = modifiedRestaurant.name
-      restaurant.name_en = modifiedRestaurant.name_en
-      restaurant.category = modifiedRestaurant.category
-      restaurant.image = modifiedRestaurant.image
-      restaurant.location = modifiedRestaurant.location
-      restaurant.phone = modifiedRestaurant.phone
-      restaurant.google_map = modifiedRestaurant.google_map
-      restaurant.rating = modifiedRestaurant.rating
-      restaurant.description = modifiedRestaurant.description
+      restaurant.name = editRestaurant.name
+      restaurant.name_en = editRestaurant.name_en
+      restaurant.category = editRestaurant.category
+      restaurant.image = editRestaurant.image
+      restaurant.location = editRestaurant.location
+      restaurant.phone = editRestaurant.phone
+      restaurant.google_map = editRestaurant.google_map
+      restaurant.rating = editRestaurant.rating
+      restaurant.description = editRestaurant.description
       return restaurant.save()
     })
     .then(() => res.redirect(`/restaurants/${id}`))
