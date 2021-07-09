@@ -41,6 +41,9 @@ app.get('/', (req, res) => {
 
 app.get('/restaurants/searches', (req, res) => {
   const keyword = req.query.keyword.trim().toLowerCase()
+  if (keyword <= 0) {
+    return res.redirect('/')
+  }
   Restaurant.find()
     .lean()
     .then((restaurants) => {
