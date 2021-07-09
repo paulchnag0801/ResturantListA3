@@ -39,31 +39,25 @@ app.get('/', (req, res) => {
     .catch((error) => console.error(error))
 })
 
-
 app.get('/restaurants/searches', (req, res) => {
   const keyword = req.query.keyword.trim().toLowerCase()
   Restaurant.find()
     .lean()
     .then((restaurants) => {
-      if (keyword) {
+      if (restaurants >= 0) {
         restaurants = restaurants.filter(
           (restaurant) =>
             restaurant.name.toLowerCase().includes(keyword) ||
             restaurant.category.includes(keyword)
         )
-        console.log('restaurants', restaurants)
-        console.log('restaurants.length', restaurants.length)
         return res.render('index', {
           restaurants: restaurants,
           keyword: req.query.keyword.trim(),
         })
-        
-      }
-      if (restaurants.length === 0) {
-        console.log('restaurants.length', restaurants.length)
-         res.render('index', {
+      } else {
+        res.render('index', {
           keyword: req.query.keyword,
-          no_result: `<h3> 沒有"${req.query.keyword}"的搜尋結果，請輸入正確的餐廳名稱</h3>`,
+          no_result: `<h3> 沒有"${keyword}"的搜尋結果，請輸入正確的餐廳名稱</h3>`,
         })
       }
     })
