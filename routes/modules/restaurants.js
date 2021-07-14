@@ -31,6 +31,18 @@ router.get('/searches', (req, res) => {
     .catch((error) => console.error(error))
 })
 
+// sort restaurants
+// sort
+router.get('/sort', (req, res) => {
+  const { select } = req.query
+  
+  Restaurant.find()
+    .lean()
+    .sort(select)
+    .then((restaurants) => res.render('index', { restaurants, select }))
+    .catch((error) => console.log(error))
+})
+
 // create route
 router.get('/new', (req, res) => {
   res.render('new')
@@ -125,16 +137,6 @@ router.delete('/:id', (req, res) => {
     .catch((error) => console.log(error))
 })
 
-// sort restaurants
-// sort
-router.get('/sort', (req, res) => {
-  const { select } = req.query
-  
-  Restaurant.find()
-    .lean()
-    .sort(select)
-    .then(restaurants => res.render('index', { restaurants, select }))
-    .catch(error => console.log(error))
-})
+
 
 module.exports = router
