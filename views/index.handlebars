@@ -1,9 +1,9 @@
 <!-- search bar -->
 <div class='container search-bar'>
-  <div class='row'>
-    <div class='col-12 col-lg-4'>
+  <div class='row mt-3'>
+    <div class='col-12 col-lg-4 '>
       <div class='search-bar-outer'>
-        <form action='/restaurants/searches' method='GET'>
+        <form action='/restaurants/searches ' method='GET'>
           <h4 class='mb-2'>尋找餐廳：</h4>
           <div class='input-group'>
             <input type='text' name='keyword' class='form-control' placeholder='輸入餐廳、分類' aria-label='Restaurant Name...'
@@ -19,6 +19,7 @@
     <form class='col-12 col-lg-4' action='/restaurants/sort' method='GET'>
       <select id='select' name='select' class='form-control' onchange='this.form.submit()'>
         <option value='0' selected disabled>選擇排序</option>
+        <option value='0' {{sort select 'ALL' }}>所有餐廳 </option>
         <option value='name' {{sort select 'name' }}>名稱:A-Z </option>
         <option value='-name' {{sort select '-name' }}>名稱:Z-A</option>
         <option value='category' {{sort select 'category' }}>類別</option>
@@ -27,6 +28,7 @@
       </select>
     </form>
   </div>
+  <a class='btn btn-outline-secondary mt-3' href='/restaurants/new'>新增餐廳</a>
 </div>
 
 <!-- restaurant list -->
