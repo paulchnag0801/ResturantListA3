@@ -1,5 +1,6 @@
 // require packages used in the project
 const express = require('express')
+const session = require('express-session')
 const methodOverride = require('method-override')
 
 // 引用路由器
@@ -24,6 +25,14 @@ app.engine(
     }
  }))
 app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
+
+app.use(
+  session({
+    secret: 'ThisIsMySecret',
+    resave: false,
+    saveUninitialized: true,
+  })
+)
 
 // setting static files
 app.use(express.static('public')) //告訴 Express 靜態檔案是放在名為 public 的資料夾中
