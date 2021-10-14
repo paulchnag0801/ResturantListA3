@@ -1,4 +1,5 @@
 const mongoose = require('mongoose') // 載入 mongoose
+const MONGODB_URI = process.env.MONGODB_URI
 mongoose.connect('mongodb://localhost/restaurant-list', {
   useNewUrlParser: true,
   useUnifiedTopology: true,

@@ -4,6 +4,11 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 const flash = require('connect-flash')
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+require('dotenv').config()
 // 引用路由器
 const routes = require('./routes')
 
@@ -11,7 +16,7 @@ const usePassport = require('./config/passport')
 require('./config/mongoose')
 
 const app = express()
-const port = 3000
+const port = process.env.PORT
 
 // require express-handlebars here
 const exphbs = require('express-handlebars')
@@ -32,7 +37,7 @@ app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
 
 app.use(
   session({
-    secret: 'ThisIsMySecret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
