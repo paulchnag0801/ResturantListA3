@@ -5,7 +5,10 @@ const methodOverride = require('method-override')
 
 // 引用路由器
 const routes = require('./routes')
+
+const usePassport = require('./config/passport')
 require('./config/mongoose')
+
 const app = express()
 const port = 3000
 
@@ -38,6 +41,9 @@ app.use(
 app.use(express.static('public')) //告訴 Express 靜態檔案是放在名為 public 的資料夾中
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+
+usePassport(app)
+
 app.use(routes)
 
 // start and listen on the Express server
