@@ -35,7 +35,7 @@ router.get('/searches', (req, res) => {
 // sort
 router.get('/sort', (req, res) => {
   const { select } = req.query
-  
+
   Restaurant.find()
     .lean()
     .sort(select)
@@ -49,6 +49,7 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  const userId = req.user._id
   const {
     name,
     name_en,
@@ -82,6 +83,7 @@ router.post('/', (req, res) => {
     google_map,
     rating,
     description,
+    userId,
   })
     .then(() => res.redirect('/'))
     .catch((error) => console.error(error))
@@ -89,9 +91,10 @@ router.post('/', (req, res) => {
 
 // read detail route
 router.get('/:id', (req, res) => {
-  const id = req.params.id
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.redirect('back')
-  return Restaurant.findById(id)
+  const userId = req.user._id
+  const _id = req.params.id
+  if (!mongoose.Types.ObjectId.isValid(_id)) return res.redirect('back')
+  return Restaurant.findOne({ _id, userId })
     .lean()
     .then((restaurant) => res.render('detail', { restaurant }))
     .catch((error) => console.error(error))
@@ -99,19 +102,21 @@ router.get('/:id', (req, res) => {
 
 // Update edit route
 router.get('/:id/edit', (req, res) => {
-  const id = req.params.id
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.redirect('back')
-  return Restaurant.findById(id)
+  const userId = req.user._id
+  const _id = req.params.id
+  if (!mongoose.Types.ObjectId.isValid(_id)) return res.redirect('back')
+  return Restaurant.findOne({ _id, userId })
     .lean()
     .then((restaurant) => res.render('edit', { restaurant }))
     .catch((error) => console.error(error))
 })
 
 router.put('/:id', (req, res) => {
-  const id = req.params.id
-  if (!mongoose.Types.ObjectId.isValid(id)) return res.redirect('back')
+  const userId = req.user._id
+  const _id = req.params.id
+  if (!mongoose.Types.ObjectId.isValid(_id)) return res.redirect('back')
   const editRestaurant = req.body
-  return Restaurant.findById(id)
+  return Restaurant.findOne({ _id, userId })
     .then((restaurant) => {
       restaurant.name = editRestaurant.name
       restaurant.name_en = editRestaurant.name_en
@@ -124,19 +129,18 @@ router.put('/:id', (req, res) => {
       restaurant.description = editRestaurant.description
       return restaurant.save()
     })
-    .then(() => res.redirect(`/restaurants/${id}`))
+    .then(() => res.redirect(`/restaurants/${_id}`))
     .catch((error) => console.error(error))
 })
 
 // delete route
 router.delete('/:id', (req, res) => {
-  const id = req.params.id
-  return Restaurant.findById(id)
+  const userId = req.user._id
+  const _id = req.params.id
+  return Restaurant.findOne({ _id, userId })
     .then((restaurant) => restaurant.remove())
     .then(() => res.redirect('/'))
     .catch((error) => console.log(error))
 })
-
-
 
 module.exports = router
