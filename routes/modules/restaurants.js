@@ -34,6 +34,7 @@ router.get('/searches', (req, res) => {
 // sort restaurants
 // sort
 router.get('/sort', (req, res) => {
+
   const { select } = req.query
 
   Restaurant.find()
