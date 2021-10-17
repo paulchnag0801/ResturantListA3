@@ -30,9 +30,10 @@ app.engine(
     helpers: {
       sort: function (select, selectValue) {
         return select === selectValue ? 'selected' : ''
-      }
-    }
- }))
+      },
+    },
+  })
+)
 app.set('view engine', 'handlebars') //設定的 view engine 是 handlebars
 
 app.use(
@@ -49,13 +50,13 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 usePassport(app)
-app.use(flash()) 
+app.use(flash())
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
   res.locals.success_msg = req.flash('success_msg')
-  res.locals.warning_msg = req.flash('warning_msg') 
+  res.locals.warning_msg = req.flash('warning_msg')
   next()
 })
 

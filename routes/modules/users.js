@@ -5,7 +5,13 @@ const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 
 router.get('/login', (req, res) => {
-  res.render('login')
+  
+  const error = req.flash('error')
+  if (error[0] === 'Missing credentials') {
+    error[0] = '請輸入 email 與密碼！'
+  }
+  res.render('login', { warning_msg: error[0] || res.locals.warning_msg })
+  
 })
 
 router.post(
@@ -13,6 +19,7 @@ router.post(
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: 'users/login',
+    failureFlash: true,
   })
 )
 
@@ -25,10 +32,10 @@ router.post('/register', (req, res) => {
   const errors = []
 
   if (!email || !password || !confirmPassword) {
-    errors.push({ message: 'Email和密碼欄位都是必填。' })
+    errors.push({ message: '信箱與密碼都是必填！' })
   }
   if (password !== confirmPassword) {
-    errors.push({ message: '密碼與確認密碼不相符！' })
+    errors.push({ message: '密碼與驗證密碼不相符！' })
   }
   if (errors.length) {
     return res.render('register', {
@@ -41,8 +48,9 @@ router.post('/register', (req, res) => {
   }
 
   User.findOne({ email }).then((user) => {
+    //fail
     if (user) {
-      errors.push({ message: '這個 Email 已經註冊過了。' })
+      errors.push({ message: '此信箱已經註冊！' })
       return res.render('register', {
         errors,
         name,
