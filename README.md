@@ -1,14 +1,31 @@
-# Restaurant List
+# 我的餐廳清單
 
-A simple web application for restaurant fanatic
+使用Express.js, mongoDB 的餐廳清單網站。
 
 ## Features
-1. 使用者可以在首頁查看所有餐廳的簡易資料
-2. 使用者可以點擊有興趣的餐廳，並獲得更詳細的資訊
-3. 使用者可以透過搜尋餐廳名稱、分類來找到特定的餐廳
+1. 使用者可以建立帳號密碼登入(本地註冊 or FaceBook註冊)
+2. 使用者可以在首頁查看所有餐廳的簡易資料
+3. 使用者可以點擊有興趣的餐廳，並獲得更詳細的資訊
+ `詳細資訊`包含：
+  * 餐廳類型
+  * 地址
+  * 電話
+  * 餐廳簡述
 4. 使用者可以新增一家餐廳
 5. 使用者可以修改一家餐廳的資訊
 6. 使用者可以刪除一家餐廳
+7. 使用者可以建立自己專屬的餐廳清單
+
+![login](login.png)
+![demo](demo.png)
+
+
+## 預設使用者 Seed Users
+>* email: user1@example.com
+>* password: 12345678
+>* email: user2@example.com
+>* password: 12345678
+
 
 ## Installation
 
@@ -20,13 +37,22 @@ A simple web application for restaurant fanatic
   `在 Terminal 輸入 npm install 指令`
 - 4.安裝 nodemon 套件
   `在 Terminal 輸入 npm install -g nodemon`
-- 5.啟動伺服器，執行 app.js 檔案
+- 5.設定環境變數檔案
+  `將檔案 .env.example 檔名改為 .env。`
+- 6.在終端機輸入以下指令新增種子資料
+  `npm run seed`
+- 7.啟動伺服器，執行 app.js 檔案
   `在 Terminal 輸入 npm run dev`
-- 6.當 terminal 出現以下字樣，表示伺服器與資料庫已啟動並成功連結
+- 9.當 terminal 出現以下字樣，表示伺服器與資料庫已啟動並成功連結
   `Express is listening on localhost:3000`
   `mongodb connected!`
+- 10.使用Facebook註冊登入
+  `需要先在 [Facebook for Developers](https://developers.facebook.com/) 中建立應用程式，將應用程式編號和密鑰填入 .env，即可使用 facebook login 功能。`
+- 11.關閉伺服器，結束專案
+  `在終端機按下 `ctrl` + `c` 或 `cmd` + `c`，以關閉伺服器`
 
-現在，你可開啟任一瀏覽器瀏覽器輸入 'http://localhost:3000' 開始使用餐廳評價網囉！
+
+現在，你可開啟任一瀏覽器瀏覽器輸入 'http://localhost:3000' 開始使用我的餐廳清單嘍！
 
 ## Prerequisites
 
