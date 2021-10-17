@@ -5,20 +5,14 @@ const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 
 router.get('/login', (req, res) => {
-  
-  const error = req.flash('error')
-  if (error[0] === 'Missing credentials') {
-    error[0] = '請輸入 email 與密碼！'
-  }
-  res.render('login', { warning_msg: error[0] || res.locals.warning_msg })
-  
+  res.render('login')
 })
 
 router.post(
   '/login',
   passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: 'users/login',
+    failureRedirect: '/users/login',
     failureFlash: true,
   })
 )
